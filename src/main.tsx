@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ArrowUpRight, ArrowRight, ArrowLeft, Leaf, ShoppingBag, X, Plus, Minus, Check, Menu, Truck, Package, Sprout, RotateCw, SlidersHorizontal, LayoutDashboard, Search, CreditCard, ChevronDown, Sun, Heart, CircleCheck, Download } from 'lucide-react';
 import './style.css';
 import './experience.css';
+import {useSmoothPage} from './useSmoothPage';
 import {BambooStory,GatheringPlanner,FieldNotes,TableVoices,FAQ,Closing,CheckoutJourney} from './Experience';
 
 type Product = {id:number; name:string; category:string; price:number; pack:number; stock:number; type:string; badge?:string; description:string};
@@ -29,6 +30,7 @@ function App(){
  useEffect(()=>{const f=()=>setAdmin(location.hash==='#admin');window.addEventListener('hashchange',f);return()=>window.removeEventListener('hashchange',f)},[]);
  useEffect(()=>{if(!toast)return;const t=setTimeout(()=>setToast(''),3200);return()=>clearTimeout(t)},[toast]);
  const overlay=!!pendingOrder||cartOpen||!!selected||!!editing||expenseOpen||!!success;
+ useSmoothPage(!admin,overlay);
  useEffect(()=>{document.body.style.overflow=overlay?'hidden':'';const esc=(e:KeyboardEvent)=>{if(e.key==='Escape'){setCartOpen(false);setSelected(null);setEditing(null);setExpenseOpen(false);setSuccess(null)}};window.addEventListener('keydown',esc);return()=>{document.body.style.overflow='';window.removeEventListener('keydown',esc)}},[overlay]);
  useEffect(()=>{if(!overlay)return;const previous=document.activeElement as HTMLElement|null;const dialog=document.querySelector<HTMLElement>('[role="dialog"]');const focusable=()=>Array.from(dialog?.querySelectorAll<HTMLElement>('button:not(:disabled),input,select,textarea,a[href],[tabindex="0"]')||[]);focusable()[0]?.focus();const trap=(e:KeyboardEvent)=>{if(e.key!=='Tab')return;const nodes=focusable();const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}};document.addEventListener('keydown',trap);return()=>{document.removeEventListener('keydown',trap);previous?.focus()}},[overlay,checkout]);
  useEffect(()=>{const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));return()=>obs.disconnect()},[admin,category,query,products.length]);
