@@ -4,6 +4,7 @@ import { ArrowUpRight, ArrowRight, ArrowLeft, Leaf, ShoppingBag, X, Plus, Minus,
 import './style.css';
 import './experience.css';
 import {useSmoothPage} from './useSmoothPage';
+import {MaterialCare,EcoChoices} from './ConsideredChoices';
 import {BambooStory,GatheringPlanner,FieldNotes,TableVoices,FAQ,Closing,CheckoutJourney} from './Experience';
 
 type Product = {id:number; name:string; category:string; price:number; pack:number; stock:number; type:string; badge?:string; description:string};
@@ -54,8 +55,10 @@ function App(){
  <div className="values-strip"><span><Sprout/>Inspired by nature</span><i/><span><Heart/>Made for shared moments</span><i/><span><Package/>Packs for every occasion</span><i/><span><Truck/>Delivered to your door</span></div>
  <section className="collection section" id="collection"><div className="section-heading reveal"><div><span className="eyebrow">THE EVERYDAY, ELEVATED</span><h2>A better kind of <em>essential.</em></h2></div><p>Simple forms. Natural textures.<br/>A place at every table.</p></div><div className="shop-toolbar"><div className="category-tabs">{['All essentials','Plates','Bowls','Cups','Cutlery'].map(c=><button className={category===c?'active':''} onClick={()=>setCategory(c)} key={c}>{c}{c==='All essentials'&&<span>{products.length}</span>}</button>)}</div><label className="search"><Search size={16}/><input aria-label="Search products" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Find your essential"/></label></div><div className="product-grid">{products.filter(p=>(category==='All essentials'||p.category===category)&&p.name.toLowerCase().includes(query.toLowerCase())).map((p,i)=><article className="product-card reveal" key={p.id}><button className={'product-image shade-'+i%4} onClick={()=>openProduct(p)} aria-label={`View ${p.name}`}><span className="product-badge">{p.badge||'Bamboo collection'}</span><ProductArt type={p.id===5?"sharing":p.type}/><span className="quick-view">Explore this essential <ArrowUpRight size={15}/></span></button><div className="product-info"><div><button className="product-name" onClick={()=>openProduct(p)}>{p.name}</button><p>Pack of {p.pack} · {p.category}</p></div><button className="add-button" disabled={!p.stock} aria-label={`Add ${p.name} to bag`} onClick={()=>add(p)}><Plus size={19}/></button></div><div className="product-price">{money(p.price)} <span>/ pack</span>{p.stock===0&&<small>Sold out</small>}</div></article>)}</div>{!products.some(p=>(category==='All essentials'||p.category===category)&&p.name.toLowerCase().includes(query.toLowerCase()))&&<div className="empty"><Search/><h3>No essentials found.</h3><button className="text-button" onClick={()=>{setQuery('');setCategory('All essentials')}}>Clear filters</button></div>}<p className="catalogue-note">Reference photography for this private concept. Photos: bambu® and Comorin Coconuts. Pictured items may differ from sample specifications; final imagery will come from the client’s catalogue.</p></section>
  <BambooStory/>
+ <MaterialCare/>
  <GatheringPlanner products={products} onAdd={rows=>{if(rows.some(r=>(cart[r.product.id]||0)+r.quantity>(products.find(p=>p.id===r.product.id)?.stock||0))){setToast('Not enough stock for this gathering, including items already in your bag.');return}setCart(c=>{const next={...c};for(const row of rows)next[row.product.id]=(next[row.product.id]||0)+row.quantity;return next});setCartOpen(true);setCheckout(false)}}/>
  <FieldNotes/>
+ <EcoChoices/>
  <TableVoices/>
  <FAQ/>
  <Closing onShop={goShop}/>
