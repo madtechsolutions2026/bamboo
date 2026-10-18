@@ -1,6 +1,7 @@
-# BAMBU ecommerce demo
+# BAMBU shopping demo
 
-A mobile-first concept for Madtech Solutions' bamboo tableware client. BAMBU is temporary branding. Products, pricing, sizes, material storytelling, and generated imagery are illustrative.
+A shopping-focused bamboo tableware concept for Madtech Solutions. BAMBU is
+sample branding. The catalogue, prices and specifications are illustrative.
 
 ## Run
 
@@ -12,38 +13,86 @@ npm run dev
 npm run build
 ```
 
-Storefront: `/`. Admin: `/#admin`. Both are part of the same responsive app.
+The Vite terminal prints the local address. Use `start-demo.cmd` for the
+existing Windows launcher. Production output is `dist/`.
 
-This implementation uses React, TypeScript, Vite, Lucide icons, custom responsive CSS and native CSS/SVG animations. Cart, inventory, orders, and expenses persist in localStorage in the same browser. No account, backend, payment gateway, email, delivery integration, or cross-device synchronization is connected. Admin access is intentionally open inside this demo; production requires authentication and server authorization. Sample checkout details only.
+## Screens and interactions
 
-## Client walkthrough
+- `/`: compact shopping banner, category tiles, featured products, gathering
+  planner, bamboo material notes and FAQ.
+- `/#shop`: complete catalogue, category/price/pack-size/availability filters,
+  price/name sorting and responsive product grid.
+- `/#saved`: saved products, persisted in this browser.
+- `/#checkout`: full-page delivery form, demo payment and order review. Both
+  Buy now and the bag checkout action open this route; Back returns to the bag.
+- `/#admin`: demo inventory, orders, status changes and expense records.
+- Product details: live stock, quantities in packs, per-unit pricing,
+  Add to bag and Buy now. Cutlery pairs are counted as sets.
+- Global search matches product names, categories and descriptions. Submit
+  the search to open matching catalogue results.
+- On mobile: sticky search/category header, two-column cards, filter drawer,
+  bottom shopping navigation and sticky product purchase controls.
 
-1. Browse and filter the six sample products. Open a product and add packs to the bag.
-2. Explore the bamboo material journey (scroll or tap stages), switch table settings, and drag or use the slider on the interactive product illustration.
-3. Complete the clearly labelled demo checkout. An order is created and inventory is reduced.
-4. Open the admin studio, update order status, edit product prices or stock, and add an expense.
-5. Reload to demonstrate browser persistence. A new browser starts with the original sample catalogue and no transactions.
+## Demonstrate the purchase flow
 
-Sales include delivery charges. Sales less recorded expenses is displayed as a simple balance, not profit. Stock is counted in packs.
+1. Search or browse the catalogue. Sort, filter and save a product.
+2. Open a product, choose packs and add to the bag. The quantity accounts for
+   packs already in the bag and cannot exceed available stock.
+3. Delivery is INR59 below a product subtotal of INR999, and free at INR999+.
+4. Continue to the separate `/#checkout` page using sample details. Refresh
+   and browser Back work; an empty bag shows a return-to-shopping screen.
+5. The bamboo-to-plate-to-package-to-truck animation leads to confirmation.
+   It has a skip control and respects reduced-motion animation preferences.
+6. Open demo admin to inspect the order, change its status, edit stock/prices,
+   or record an expense. Changes persist on reload in the same browser.
 
-## Verification
+The gathering planner calculates complete packs for 5-250 guests. Its kit has
+one plate, cup and cutlery set per guest. All kit quantities are checked
+before any are added to the bag.
 
-TypeScript check and Vite production build. Browser walkthrough at 390px: cart, checkout, order confirmation, order status, stock deduction, and expense recording. Tablet and mobile visual checks. Reduced-motion styles and keyboard modal focus trapping are included.
+## Technical scope
 
-## Image provenance
+React, TypeScript, Vite, Lucide icons, custom CSS and native CSS/SVG animation.
+Catalogue, bag, saved products, orders and expenses use localStorage. Stored
+catalogue/history records are validated; cart IDs and integer quantities are
+normalized against current products and stock. Modal focus follows each
+checkout stage; the underlying page is inert while a root dialog is open.
 
-Product cards, product detail panels, cart, admin thumbnails, hero, and table-setting scenes use locally optimized supplier reference photography. See design/PHOTO-SOURCES.md for source credits and replacement requirements. Some pictured products are reusable; sample catalogue specifications are illustrative. The material journey retains intentional graphic bamboo illustrations.
+This remains a simulated frontend demo. There is no account backend, real
+payment, email, delivery service, shared inventory or cross-device sync.
+Admin is intentionally open for demonstration. Production needs authenticated
+server-side permissions and transactional inventory/order/payment services.
 
-The original generated hero is retained in design/bamboo-editorial-source.png for history and is no longer displayed.
+Sales include delivery. Sales minus recorded expenses is an indicative balance,
+not a profit calculation. Stock is measured in packs.
 
-## Local environment
+## Verification - shopping revision, 18 October 2026
 
-The host's npm shim was broken and the network install stalled. This checkout currently reuses the existing project's installed dependencies through an ignored local node_modules junction. The package manifest and lockfile are provided for a normal independent installation elsewhere.
+- TypeScript and Vite production build.
+- Corrupt stored JSON, invalid catalogue records, unknown cart IDs, fractional
+  or negative quantities, stock caps and invalid historical records checked.
+- Browser search, category/price/pack filters, sorting, empty results, saved
+  products and reload persistence checked.
+- Mobile checkout: 2 plate packs + 1 cup pack = INR997 subtotal + INR59 delivery.
+  Adding one tasting-spoon pack gives INR1146 with free delivery. The order
+  completed, stock deducted correctly, and status persisted after reload.
+- Admin expense recording and 30-guest kit calculation checked: 2 packs each
+  of plates/cups/cutlery, INR1694 before delivery (free at this total).
+- Desktop/mobile responsive layout and keyboard modal focus checked.
+- Separate checkout page: Buy now, bag checkout, direct link/reload, edit bag
+  and browser Back checked. Required fields and invalid PIN block submission.
+  A mobile order completed at INR408 (INR349 + INR59 delivery). Empty checkout
+  returns a shopping CTA. No horizontal overflow at 390px or 1440px.
 
-## October redesign
-Original hero restored. Compact photo cards with hover reveal. Real bamboo grove story with replayable material-to-delivery animation. Gathering planner calculates whole packs from guest counts and checks available stock, including existing bag quantities. Notebook, labelled sample-story carousel, FAQ accordion, and split bamboo closing section added. Demo order submission plays a 4.7-second bamboo-to-plate-to-package-to-truck sequence, with a skip control, before confirmation. No real transaction or shipment occurs.
+## Photography
 
-Verified at 390px: no horizontal overflow and FAQ expansion. Browser checkout test: 30 guests, 2 packs each of plate/cup/cutlery, total ₹1,694, animated journey then confirmation. TypeScript and production build pass.
+Existing local reference photography is retained. It is not the client's
+confirmed product catalogue. Credits and replacement requirements are in
+`design/PHOTO-SOURCES.md`. No reviews, discounts or certifications are invented.
+The material story and FAQ appear on the homepage; product listings stay compact.
 
+## Local dependencies
 
-# bamboo
+This checkout currently reuses installed packages through an ignored
+node_modules junction. The package manifest and lockfile remain suitable for
+an independent `npm install` elsewhere. No new dependencies were added.
